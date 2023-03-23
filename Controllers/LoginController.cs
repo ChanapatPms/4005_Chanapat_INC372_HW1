@@ -50,8 +50,15 @@ public class LoginController : Controller
             var _user = _databaseContext_login.Accounts.SingleOrDefault(o => o.Id == user.Id && o.User == user.User && o.Password == user.Password);
             if(_user != null)       //Check username is collect or not
             {
-                updateStatus(user, "online");
-                return Ok(new { result = _user, message = "Login success"});
+                if(_user.Status == "offline")
+                {
+                    updateStatus(user, "online");
+                    return Ok(new { result = _user, message = "Login success"});
+                }
+                else
+                {
+                    return Ok(new { result = _user, message = "Already login"});
+                }
             }
             else{
                 return Ok(new { message = "Login fail"});

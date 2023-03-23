@@ -50,8 +50,15 @@ public class LogoutController : Controller
             var _user = _databaseContext_logout.Accounts.SingleOrDefault(o => o.Id == user.Id && o.User == user.User);
             if(_user != null)       //Check username is collect or not
             {
-                updateStatus(user, "offline");
-                return Ok(new { result = _user, message = "Logout success"});
+                if(_user.Status == "offline")
+                {
+                    updateStatus(user, "offline");
+                    return Ok(new { result = _user, message = "Logout success"});
+                }
+                else
+                {
+                    return Ok(new { result = _user, message = "Already logout"});
+                }
             }
             else{
                 return Ok(new { message = "Logout fail"});
